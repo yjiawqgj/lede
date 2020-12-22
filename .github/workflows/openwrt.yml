@@ -11,6 +11,8 @@ on:
         default: 'false'
 #  schedule:
 #    - cron: 0 21 */7 * * 
+env:
+  DIY_P2_SH: diy-part2.sh
 
 jobs:
 
@@ -51,6 +53,12 @@ jobs:
           curl -fsSL https://git.io/JLE4E | sh
           ./scripts/feeds install -a
           chmod -R 755 .
+          - name: Load custom configuration
+      run: |
+        chmod +x $DIY_P2_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P2_SH
+        
       - name: Generate configuration file
         run: |
           curl -fsSL https://git.io/JLEPp > .config
