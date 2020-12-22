@@ -54,7 +54,7 @@ jobs:
           curl -fsSL https://git.io/JLE4E | sh
           ./scripts/feeds install -a
           chmod -R 755 .
-          - name: Load custom configuration
+      - name: Load custom configuration
       run: |
         chmod +x $DIY_P2_SH
         cd openwrt
