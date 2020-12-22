@@ -1,108 +1,156 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@yjiawqgj 
+yjiawqgj
+/
+lede
+forked from coolsnowwolf/lede
+0
+012.3k
+Code
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+lede
+/
+.github
+/
+workflows
+/
+openwrt.yml
+ 
+
+Spaces
+
+2
+
+No wrap
+1
 name: OpenWrt-CI
-
-
+2
+​
+3
+​
+4
 on:
+5
   repository_dispatch:
+6
   workflow_dispatch:
+7
     inputs:
+8
       ssh:
+9
         description: 'SSH connection to Actions'
+10
         required: false
+11
         default: 'false'
+12
 #  schedule:
+13
 #    - cron: 0 21 */7 * * 
-
+14
 env:
+15
   DIY_P2_SH: diy-part2.sh
-
+16
+​
+17
 jobs:
-
+18
+​
+19
   build_openwrt:
-
+20
+​
+21
     name: OpenWrt_Build 
-
+22
+​
+23
     runs-on: ubuntu-latest
-
+24
+​
+25
     if: github.event.repository.owner.id == github.event.sender.id
-
+26
+​
+27
     steps:
-
+28
+​
+29
       - name: Checkout
+30
         uses: actions/checkout@v2
+31
         with:
+32
           ref: master
+33
       - name: Space cleanup
+34
         env:
+35
           DEBIAN_FRONTEND: noninteractive
+36
         run: |
+37
           docker rmi `docker images -q`
+38
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+39
           sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
+40
           sudo -E apt-get update
+41
           sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev curl patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig
+42
           sudo -E apt-get -y autoremove --purge
+43
           sudo -E apt-get clean
+44
           sudo timedatectl set-timezone "Asia/Shanghai"
+45
       - name: Update feeds
+46
         run: |
+47
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
-          #sed -i 's/coolsnowwolf/sirpdboy/g' ./feeds.conf.default
-          git clone https://github.com/sirpdboy/sirpdboy-package package/diy
-          ./scripts/feeds update -a
-      - name: Update package
-        run: |
-          curl -fsSL https://git.io/JLE4E | sh
-          ./scripts/feeds install -a
-          chmod -R 755 .
-      - name: Load custom configuration
-        run: |
-          chmod +x $DIY_P2_SH
-          cd openwrt
-          $GITHUB_WORKSPACE/$DIY_P2_SH
-      - name: Generate configuration file
-        run: |
-          curl -fsSL https://git.io/JLEPp > .config
-          make defconfig
-      - name: Make download
-        run: |
-          make download -j8
-          find dl -size -1024c -exec rm -f {} \;
-      - name: Compile firmware
-        run: |
-          make -j$(nproc) || make -j1 V=s
-          echo "======================="
-          echo "Space usage:"
-          echo "======================="
-          df -h
-          echo "======================="
-          du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
-          du -h --max-depth=1 ./build_dir
-          du -h --max-depth=1 ./bin
-      - name: Prepare Artifact
-        run: |
-          mkdir -p ./new/firmware
-          mkdir -p ./new/package
-          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./new/package
-          find bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./new/firmware
-          cd ./new/firmware
-          gzip *.img
-      - name: Upload Firmware
-        uses: actions/upload-artifact@main
-        with:
-          name: SirpdboyOpenWrt-IPV6-Firmware
-          path: ./new/firmware
-      - name: Upload  IPK
-        uses: actions/upload-artifact@main
-        with:
-          name: SirpdboyOpenWrt-IPV6-Ipk
-          path: ./new/package
-      - name: Upload firmware to cowtransfer
-        run: |
-         curl -fsSL git.io/file-transfer | sh
-         ./transfer cow --block 2621440 -s -p 64 --no-progress ./new/firmware 2>&1 | tee cowtransfer.log
-         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-      - name: Upload Firmware wetransfer
-        run: |
-          curl -fsSL git.io/file-transfer | sh
-          ./transfer wet -s -p 16 --no-progress ./new/firmware 2>&1 | tee wetransfer.log
-          echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+Use Control + Space to trigger autocomplete in most situations.
+Search Marketplace for Actions
+Featured Actions
+
+Setup a Node.js environment by adding problem matchers and optionally downloading and adding it to the PATH
+
+ 824
+
+Setup a Go environment and add it to the PATH
+
+ 317
+
+Close issues and pull requests with no recent activity
+
+ 302
+
+Download a build artifact that was previously uploaded in the workflow by the upload-artifact action
+
+ 231
+
+Greet new contributors when they create their first issue or open their first pull request
+
+ 80
+Featured categories
+Browse all actions on the GitHub Marketplace
