@@ -55,11 +55,10 @@ jobs:
           ./scripts/feeds install -a
           chmod -R 755 .
       - name: Load custom configuration
-      run: |
-        chmod +x $DIY_P2_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
-        
+        run: |
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
       - name: Generate configuration file
         run: |
           curl -fsSL https://git.io/JLEPp > .config
