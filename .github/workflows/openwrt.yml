@@ -1,4 +1,3 @@
-
 name: OpenWrt-CI
 
 
@@ -71,7 +70,6 @@ jobs:
           du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
-
       - name: Prepare Artifact
         run: |
           mkdir -p ./new/firmware
